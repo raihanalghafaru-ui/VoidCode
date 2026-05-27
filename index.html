@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>VOIDCODE | Belajar Pemrograman Lengkap</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at 10% 20%, #0f0c0a, #050302);
+            color: #fff3e6;
+            overflow-x: hidden;
+            line-height: 1.5;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #2a1e12;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #f97316;
+            border-radius: 8px;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 0.7rem 2rem;
+            background: rgba(15, 12, 10, 0.95);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f97316;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #facc15;
+            box-shadow: 0 0 8px #f97316;
+            transition: transform 0.2s;
+        }
+        .logo-img:hover {
+            transform: scale(1.05);
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(125deg, #facc15, #f97316);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+
+        .hamburger {
+            cursor: pointer;
+            font-size: 1.8rem;
+            color: #facc15;
+            transition: 0.2s;
+            background: rgba(249,115,22,0.15);
+            padding: 6px 12px;
+            border-radius: 30px;
+        }
+        .hamburger:hover {
+            background: #f97316;
+            color: #0a0f1e;
+        }
+
+        .menu-panel {
+            position: fixed;
+            top: 0;
+            right: -380px;
+            width: 340px;
+            height: 100%;
+            background: rgba(15, 12, 10, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 1100;
+            transition: right 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border-left: 2px solid #f97316;
+            padding: 5rem 1.5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            overflow-y: auto;
+        }
+        .menu-panel.open {
+            right: 0;
+        }
+        .menu-item {
+            background: #f9731622;
+            border: 1px solid #facc15;
+            padding: 0.9rem;
+            border-radius: 50px;
+            text-align: center;
+            font-weight: 600;
+            color: #fcd34d;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .menu-item:hover {
+            background: #f97316;
+            color: #0a0f1e;
+            border-color: #f97316;
+            transform: translateX(-5px);
+        }
+        .close-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.7rem;
+            cursor: pointer;
+            color: #facc15;
+            background: #2a1e12;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(3px);
+            z-index: 1050;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.25s;
+        }
+        .overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .feedback-list {
+            margin-top: 1.2rem;
+            border-top: 1px solid #f97316;
+            padding-top: 1.2rem;
+            max-height: 320px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .feedback-item {
+            background: #1f1a14;
+            border-radius: 20px;
+            padding: 0.9rem;
+            border-left: 3px solid #facc15;
+        }
+        .feedback-name {
+            font-weight: bold;
+            color: #facc15;
+            font-size: 0.9rem;
+        }
+        .feedback-stars {
+            color: #fbbf24;
+            margin: 4px 0;
+            font-size: 0.8rem;
+        }
+        .feedback-text {
+            color: #ffeedd;
+            font-size: 0.85rem;
+            word-break: break-word;
+        }
+        .feedback-date {
+            font-size: 0.65rem;
+            color: #c9a96b;
+            text-align: right;
+            margin-top: 6px;
+        }
+
+        .modal-feedback, .modal-credit {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            background: #1e1712f2;
+            backdrop-filter: blur(24px);
+            width: 90%;
+            max-width: 440px;
+            border-radius: 36px;
+            padding: 2rem;
+            z-index: 1200;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.2s;
+            border: 1px solid #facc15;
+            color: #fff3e6;
+            box-shadow: 0 25px 40px rgba(0,0,0,0.5);
+        }
+        .modal-feedback.show-modal, .modal-credit.show-modal {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .modal-feedback h3, .modal-credit h3 {
+            color: #f97316;
+            margin-bottom: 1.2rem;
+            font-size: 1.6rem;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            margin: 0.6rem 0;
+            background: #2a241f;
+            border: 1px solid #f97316;
+            border-radius: 28px;
+            color: #fff0e0;
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        textarea {
+            border-radius: 20px;
+            resize: vertical;
+        }
+        .star-rating {
+            display: flex;
+            gap: 0.6rem;
+            justify-content: center;
+            margin: 1rem 0;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+        .star-rating i {
+            color: #5f4c38;
+            transition: 0.1s;
+        }
+        .star-rating i.active {
+            color: #facc15;
+        }
+        button.close-modal, button.submit-feedback {
+            background: #f97316;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 40px;
+            color: #1a120c;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 0.8rem;
+            width: auto;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+        button.close-modal:hover, button.submit-feedback:hover {
+            background: #facc15;
+            transform: scale(0.98);
+        }
+
+        .hero {
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-top: 70px;
+            padding: 2rem 1.5rem;
+        }
+        .hero-content {
+            max-width: 800px;
+        }
+        .hero-logo {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #facc15;
+            box-shadow: 0 0 25px #f97316;
+            margin-bottom: 1.2rem;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #facc15, #f97316);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        .welcome-msg {
+            margin-top: 1.2rem;
+            background: #f9731622;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.6rem 1.8rem;
+            border-radius: 60px;
+            border: 1px solid #facc15;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 1rem auto 3rem;
+            padding: 0 1.8rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 2rem 0 1rem;
+            border-left: 6px solid #f97316;
+            padding-left: 1rem;
+            color: #facc15;
+        }
+
+        .topic-card {
+            background: rgba(25, 20, 16, 0.8);
+            backdrop-filter: blur(6px);
+            border-radius: 2rem;
+            margin-bottom: 2rem;
+            padding: 1.8rem 2rem;
+            border: 1px solid rgba(249, 115, 22, 0.5);
+            transform: translateY(30px);
+            opacity: 0;
+            transition: transform 0.6s ease, opacity 0.5s ease;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        .topic-card.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .topic-card:hover {
+            border-color: #facc15;
+            box-shadow: 0 20px 35px rgba(249,115,22,0.2);
+        }
+
+        .card-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            align-items: flex-start;
+        }
+        .card-text {
+            flex: 2;
+            min-width: 250px;
+        }
+        .card-code {
+            flex: 1.5;
+            min-width: 250px;
+            background: #0f0c0a;
+            border-radius: 1.2rem;
+            padding: 1rem;
+            border-left: 6px solid #facc15;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            color: #fee6b0;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .topic-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 0.5rem;
+        }
+        .topic-header i {
+            font-size: 2.4rem;
+            color: #f97316;
+        }
+        .topic-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #facc15;
+        }
+        .divider {
+            width: 70px;
+            height: 4px;
+            background: #f97316;
+            border-radius: 6px;
+            margin: 0.6rem 0 1rem 0;
+        }
+        .explanation {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #ffefdf;
+            text-align: justify;
+            margin-bottom: 1rem;
+        }
+        .image-placeholder {
+            margin: 1.2rem 0;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+        .image-placeholder div {
+            background: #2a241f;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #f97316;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .reverse .card-content {
+            flex-direction: row-reverse;
+        }
+        @media (max-width: 780px) {
+            .hero h1 { font-size: 2.2rem; }
+            .topic-title { font-size: 1.5rem; }
+            .topic-card { padding: 1.2rem; }
+            .menu-panel { width: 280px; right: -300px; }
+            .card-content { flex-direction: column !important; }
+        }
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 1.8rem; }
+            .hero-logo { width: 75px; height: 75px; }
+        }
+    </style>
+</head>
+<body>
+<div class="overlay" id="overlay"></div>
+<div class="menu-panel" id="menuPanel">
+    <i class="fas fa-times close-menu" id="closeMenu"></i>
+    <div class="menu-item" id="creditBtn"><i class="fas fa-id-card"></i> Credit</div>
+    <div class="menu-item" id="feedbackBtn"><i class="fas fa-star"></i> Beri Feedback</div>
+    <div class="feedback-list" id="feedbackListContainer">
+        <div style="text-align:center; color:#c9a96b; padding:1rem;">Memuat feedback...</div>
+    </div>
+</div>
+
+<div class="modal-credit" id="creditModal">
+    <h3><i class="fas fa-user-graduate"></i> Tentang Kreator</h3>
+    <p>Pembuat nya adalah <strong>Muhammad Raihan Al Ghafaru</strong>, saat website ini di buat dia kelas 6 SD, dia buat ini dengan detail dan rincian yang lama butuh 2 Minggu untuk membuat website ini dengan detail.</p>
+    <button class="close-modal" id="closeCreditModal">Tutup</button>
+</div>
+
+<div class="modal-feedback" id="feedbackModal">
+    <h3><i class="fas fa-comment-dots"></i> Kirim Feedback</h3>
+    <input type="text" id="fbName" placeholder="Nama (opsional)" maxlength="30">
+    <textarea id="fbMessage" rows="3" placeholder="Pesan / saran untuk website..." required></textarea>
+    <div class="star-rating" id="starRating">
+        <i class="far fa-star" data-value="1"></i>
+        <i class="far fa-star" data-value="2"></i>
+        <i class="far fa-star" data-value="3"></i>
+        <i class="far fa-star" data-value="4"></i>
+        <i class="far fa-star" data-value="5"></i>
+    </div>
+    <button class="submit-feedback" id="submitFeedbackBtn">Kirim Feedback</button>
+    <button class="close-modal" id="closeFeedbackModal" style="background:#5f4c38;">Batal</button>
+</div>
+
+<nav class="navbar">
+    <div class="logo-area">
+        <img class="logo-img" src="https://cdn.phototourl.com/free/2026-05-27-c4940a0f-9591-4bb9-bbcb-839f1a1ce33a.png" alt="logo">
+        <div class="logo"><i class=""></i> VoidCode</div>
+    </div>
+    <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
+</nav>
+
+<section class="hero">
+    <div class="hero-content">
+        <img class="hero-logo" src="https://cdn.phototourl.com/free/2026-05-27-c4940a0f-9591-4bb9-bbcb-839f1a1ce33a.png" alt="logo">
+        <h1>Halo selamat berkunjung di website kami</h1>
+        <div class="welcome-msg"><i class="fas fa-hand-peace"></i> Belajar coding itu mudah</div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="section-title"><i class="fas fa-question-circle"></i> Apa itu Coding?</div>
+    <div class="topic-card" data-scroll>
+        <div class="card-content">
+            <div class="card-text">
+                <div class="topic-header"><i class="fas fa-laptop-code"></i><div class="topic-title">PENGERTIAN CODING</div></div>
+                <div class="divider"></div>
+                <div class="explanation">
+                    Coding adalah proses menulis instruksi dalam bahasa pemrograman agar komputer melakukan tugas tertentu. Komputer hanya mengerti bahasa mesin (biner 0 dan 1), namun coding memungkinkan manusia menulis menggunakan bahasa tingkat tinggi seperti Python, JavaScript, atau Java. Instruksi tersebut nantinya akan diterjemahkan oleh compiler atau interpreter menjadi perintah yang bisa dijalankan mesin. Coding adalah fondasi dari semua aplikasi, website, game, AI, hingga sistem operasi. Dengan belajar coding, kamu melatih logika, problem solving, dan kreativitas.
+                </div>
+            </div>
+            <div class="card-code">
+                &lt;?php<br>
+                // Contoh kode sederhana<br>
+                echo "Hello World!";<br>
+                ?&gt;<br><br>
+                # Python<br>
+                print("Belajar coding!")
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title"><i class="fas fa-play-circle"></i> Cara Menjalankan Program</div>
+    <div class="topic-card reverse" data-scroll>
+        <div class="card-content">
+            <div class="card-text">
+                <div class="topic-header"><i class="fas fa-terminal"></i><div class="topic-title">Run Kode & Alat yang Dibutuhkan</div></div>
+                <div class="divider"></div>
+                <div class="explanation">
+                    <strong>1. Compiler vs Interpreter:</strong> Compiler (C++, Go) menerjemahkan seluruh kode sekaligus menjadi file executable. Interpreter (Python, JavaScript) menjalankan kode baris per baris.<br>
+                    <strong>2. Cara Run Python:</strong> Install Python dari python.org, tulis kode di file dengan ekstensi .py, lalu buka terminal/CMD dan ketik `python namafile.py`. Bisa juga pakai IDE seperti VS Code, PyCharm, atau Pydroid3 di HP.<br>
+                    <strong>3. Cara Run JavaScript:</strong> Cukup buka browser, tekan F12 -> Console, atau buat file .html dan sisipkan script.<br>
+                    <strong>4. Cara Run HTML/CSS:</strong> Cukup double klik file .html di browser. Untuk live server bisa pakai extension Live Server di VS Code.<br>
+                    <strong>5. Cara Run Java:</strong> Install JDK, compile dengan `javac Main.java` lalu jalankan `java Main`.<br>
+                    <strong>6. Online Compiler:</strong> Untuk belajar cepat bisa gunakan replit.com, onecompiler.com, atau Google Colab (Python).
+                </div>
+                <div class="image-placeholder"><div><i class="fab fa-python"></i> Python</div><div><i class="fab fa-js"></i> JavaScript</div><div><i class="fab fa-java"></i> Java</div></div>
+            </div>
+            <div class="card-code">
+                // Contoh menjalankan Python di terminal<br>
+                $ python halo.py<br>
+                Halo Dunia!<br>
+                // Contoh menjalankan node.js<br>
+                $ node script.js<br>
+                // Output: Hello Node
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title"><i class="fas fa-cogs"></i> Bahasa Pemrograman Populer</div>
+    
+    <div class="topic-card" data-scroll>
+        <div class="card-content">
+            <div class="card-text">
+                <div class="topic-header"><i class="fab fa-python"></i><div class="topic-title">Python - Otak AI & Data</div></div>
+                <div class="divider"></div>
+                <div class="explanation">Python adalah bahasa serbaguna dengan ekosistem kaya: Django (web), Pandas (data), TensorFlow (AI), dan otomatisasi. Sintaksnya mirip bahasa Inggris, cocok untuk pemula. Digunakan di Google, NASA, dan startup. Cara menjalankan: `python script.py`.</div>
+            </div>
+            <div class="card-code">
+                print("Belajar Python itu asyik!")<br>
+                angka = [x*2 for x in range(5)]<br>
+                print(angka)  # [0,2,4,6,8]
+            </div>
+        </div>
+    </div>
+
+    <div class="topic-card reverse" data-scroll>
+        <div class="card-content">
+            <div class="card-text">
+                <div class="topic-header"><i class="fab fa-js"></i><div class="topic-title">JavaScript - Web & Interaktif</div></div>
+                <div class="divider"></div>
+                <div class="explanation">JavaScript berjalan di browser maupun server (Node.js). Digunakan untuk membuat website dinamis, animasi, dan aplikasi realtime. Framework seperti React, Vue, Angular sangat populer. Bisa dijalankan di console browser atau file .js dengan node.</div>
+            </div>
+            <div class="card-code">
+                alert("Halo dari JS!");<br>
+                document.querySelector("h1").style.color = "#facc15";<br>
+                console.log("JS Modern");
+            </div>
+        </div>
+    </div>
+
+    <div class="topic-card" data-scroll>
+        <div class="card-content">
+            <div class="card-text">
+                <div class="topic-header"><i class="fab fa-java"></i><div class="topic-title">Java - Enterprise & Android</div></div>
+                <div class="divider"></div>
+                <div class="explanation">Java dikenal dengan "Write Once Run Anywhere" karena JVM. Banyak dipakai di backend, aplikasi Android (Kotlin juga), dan sistem besar. Compile ke bytecode lalu jalankan di JVM.</div>
+            </div>
+            <div class="card-code">
+                public class Main {<br>
+                  public static void main(String[] args) {<br>
+                    System.out.println("Java rocks!");<br>
+                  }<br>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="topic-card reverse" data-scroll>
+        <div class="card-content">
+            <div class="card-text">
+                <div class="topic-header"><i class="fas fa-database"></i><div class="topic-title">MySQL - Database Populer</div></div>
+                <div class="divider"></div>
+                <div class="explanation">MySQL adalah sistem manajemen database relasional (RDBMS) yang menggunakan SQL. Digunakan oleh banyak aplikasi web seperti WordPress, Laravel, dan e-commerce. Query dasar: SELECT, INSERT, UPDATE, DELETE. Sangat penting untuk backend developer.</div>
+            </div>
+            <div class="card-code">
+                CREATE TABLE users (<br>
+                  id INT AUTO_INCREMENT PRIMARY KEY,<br>
+                  nama VARCHAR(100),<br>
+                  email VARCHAR(100)<br>
+                );<br>
+                SELECT * FROM users WHERE nama LIKE 'Raihan%';
+            </div>
+        </div>
+    </div>
+
+    <div class="topic-card" data-scroll>
+        <div class="card-content">
+            <div class="card-text">
+                <div class="topic-header"><i class="fas fa-code"></i><div class="topic-title">C++ - Performa Tinggi</div></div>
+                <div class="divider"></div>
+                <div class="explanation">C++ adalah bahasa pemrograman yang sangat cepat, digunakan untuk game engine, sistem operasi, embedded system, dan aplikasi real-time. Dikembangkan dari C dengan tambahan fitur OOP. Compiler seperti g++ digunakan untuk mengcompile kode C++.</div>
+            </div>
+            <div class="card-code">
+                #include &lt;iostream&gt;<br>
+                using namespace std;<br>
+                int main() {<br>
+                  cout &lt;&lt; "Hello C++" &lt;&lt; endl;<br>
+                  return 0;<br>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="topic-card reverse" data-scroll>
+        <div class="card-content">
+            <div class="card-text">
+                <div class="topic-header"><i class="fas fa-gamepad"></i><div class="topic-title">Lua - Scripting Game & Roblox</div></div>
+                <div class="divider"></div>
+                <div class="explanation">Lua adalah bahasa scripting ringan, cepat, dan mudah diintegrasikan. Banyak dipakai di game engine (Roblox, Love2D, GMod), juga untuk konfigurasi dan embedded system. Sintaksnya sederhana dan dinamis. Roblox menggunakan Lua untuk membuat game interaktif.</div>
+            </div>
+            <div class="card-code">
+                local nama = "Raihan"<br>
+                for i = 1, 5 do<br>
+                  print("Halo " .. nama)<br>
+                end<br>
+                -- Fungsi sederhana<br>
+                function tambah(a,b) return a+b end
+            </div>
+        </div>
+    </div>
+
+    <div class="topic-card" data-scroll>
+        <div class="card-content">
+            <div class="card-text">
+                <div class="topic-header"><i class="fab fa-php"></i><div class="topic-title">PHP - Backend Web</div></div>
+                <div class="divider"></div>
+                <div class="explanation">PHP adalah bahasa server-side yang populer untuk pengembangan web dinamis. Powering WordPress, Facebook (dulu), dan banyak CMS. Mudah dipelajari dan banyak hosting support.</div>
+            </div>
+            <div class="card-code">
+                &lt;?php<br>
+                $nama = "VOID";<br>
+                echo "Selamat datang " . $nama;<br>
+                ?&gt;
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title"><i class="fas fa-chalkboard-teacher"></i> Detail Pemrograman Web</div>
+    <div class="topic-card reverse" data-scroll>
+        <div class="card-content">
+            <div class="card-text">
+                <div class="topic-header"><i class="fab fa-html5"></i><div class="topic-title">HTML, CSS, JavaScript</div></div>
+                <div class="divider"></div>
+                <div class="explanation">
+                    HTML membangun struktur, CSS mempercantik tampilan, JavaScript menambahkan interaksi. Untuk menjalankan, buat file index.html, tulis kode dan buka di browser. Kamu juga bisa menggunakan Live Server untuk melihat perubahan secara real-time. 
+                    Tips: Gunakan browser DevTools (F12) untuk debugging. Belajar Flexbox dan Grid membuat layout responsif. Media queries untuk tampilan mobile. JavaScript modern menggunakan ES6 seperti let, const, arrow function, dan fetch API.
+                </div>
+                <div class="image-placeholder"><div><i class="fab fa-html5"></i> HTML5</div><div><i class="fab fa-css3-alt"></i> CSS3</div><div><i class="fab fa-js"></i> ES6</div></div>
+            </div>
+            <div class="card-code">
+                &lt;!DOCTYPE html&gt;<br>
+                &lt;html&gt;&lt;head&gt;&lt;style&gt;<br>
+                body { background: #f97316; }<br>
+                &lt;/style&gt;&lt;/head&gt;<br>
+                &lt;body&gt;&lt;h1&gt;Belajar Web&lt;/h1&gt;<br>
+                &lt;script&gt;console.log("OK")&lt;/script&gt;<br>
+                &lt;/body&gt;&lt;/html&gt;
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title"><i class="fas fa-database"></i> Database & Backend</div>
+    <div class="topic-card" data-scroll>
+        <div class="card-content">
+            <div class="card-text">
+                <div class="topic-header"><i class="fas fa-server"></i><div class="topic-title">SQL dan Cara Menghubungkan</div></div>
+                <div class="divider"></div>
+                <div class="explanation">
+                    Database menyimpan data terstruktur. SQL digunakan untuk mengambil, menyimpan, memanipulasi data. Cara run SQL bisa pakai MySQL Workbench, phpMyAdmin, atau SQLite di terminal. Untuk backend, kamu bisa menggunakan Python Flask, Node.js Express, atau PHP. Contoh menghubungkan Python ke MySQL: install mysql-connector-python, lalu buat koneksi.
+                </div>
+            </div>
+            <div class="card-code">
+                SELECT * FROM users WHERE kota = 'Jakarta';<br>
+                // Python dengan MySQL<br>
+                import mysql.connector<br>
+                conn = mysql.connector.connect(<br>
+                  host="localhost", user="root")<br>
+                cursor = conn.cursor()
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title"><i class="fas fa-tools"></i> Cara Belajar Efektif</div>
+    <div class="topic-card reverse" data-scroll>
+        <div class="card-content">
+            <div class="card-text">
+                <div class="topic-header"><i class="fas fa-brain"></i><div class="topic-title">Metode & Sumber Belajar</div></div>
+                <div class="divider"></div>
+                <div class="explanation">
+                    <strong>Praktik langsung</strong> - Jangan hanya nonton tutorial, buat proyek kecil.<br>
+                    <strong>Gunakan dokumentasi resmi</strong> (MDN untuk web, python.org, dll).<br>
+                    <strong>Ikuti challenge coding</strong> di HackerRank, LeetCode, atau Codewars.<br>
+                    <strong>Baca kode orang lain</strong> di GitHub.<br>
+                    <strong>Debugging</strong> adalah skill penting, biasakan membaca error.<br>
+                    <strong>Gabung komunitas</strong> seperti Discord programming atau forum Indonesia.<br>
+                    Untuk pemula, mulai dengan Python atau JavaScript, lalu pelajari algoritma dasar, dan buat project akhir seperti website sederhana atau kalkulator.
+                </div>
+                <div class="image-placeholder"><div><i class="fab fa-github"></i> GitHub</div><div><i class="fab fa-stack-overflow"></i> StackOverflow</div></div>
+            </div>
+            <div class="card-code">
+                // Tips debugging<br>
+                console.log("Cek nilai variabel");<br>
+                # Python pdb<br>
+                import pdb; pdb.set_trace()
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <i class="fas fa-fire"></i> VOIDCODE — Belajar Pemrograman Tanpa Batas | #OrenKuning
+</footer>
+
+<script>
+    (function() {
+        const hamburger = document.getElementById('hamburger');
+        const panel = document.getElementById('menuPanel');
+        const overlay = document.getElementById('overlay');
+        const closeMenu = document.getElementById('closeMenu');
+        const creditBtn = document.getElementById('creditBtn');
+        const creditModal = document.getElementById('creditModal');
+        const closeCredit = document.getElementById('closeCreditModal');
+        const feedbackBtn = document.getElementById('feedbackBtn');
+        const feedbackModal = document.getElementById('feedbackModal');
+        const closeFeedbackModal = document.getElementById('closeFeedbackModal');
+        const submitFeedback = document.getElementById('submitFeedbackBtn');
+        const feedbackListContainer = document.getElementById('feedbackListContainer');
+        
+        const stars = document.querySelectorAll('#starRating i');
+        let selectedRating = 0;
+        
+        function openMenu() { panel.classList.add('open'); overlay.classList.add('show'); document.body.style.overflow = 'hidden'; }
+        function closeMenuSide() { panel.classList.remove('open'); overlay.classList.remove('show'); document.body.style.overflow = ''; }
+        hamburger.addEventListener('click', openMenu);
+        closeMenu.addEventListener('click', closeMenuSide);
+        overlay.addEventListener('click', closeMenuSide);
+        
+        creditBtn.addEventListener('click', () => {
+            closeMenuSide();
+            setTimeout(() => creditModal.classList.add('show-modal'), 150);
+        });
+        closeCredit.addEventListener('click', () => creditModal.classList.remove('show-modal'));
+        creditModal.addEventListener('click', (e) => { if(e.target === creditModal) creditModal.classList.remove('show-modal'); });
+        
+        feedbackBtn.addEventListener('click', () => {
+            closeMenuSide();
+            setTimeout(() => feedbackModal.classList.add('show-modal'), 150);
+            resetFeedbackForm();
+        });
+        closeFeedbackModal.addEventListener('click', () => feedbackModal.classList.remove('show-modal'));
+        feedbackModal.addEventListener('click', (e) => { if(e.target === feedbackModal) feedbackModal.classList.remove('show-modal'); });
+        
+        function resetFeedbackForm() {
+            document.getElementById('fbName').value = '';
+            document.getElementById('fbMessage').value = '';
+            selectedRating = 0;
+            stars.forEach(star => {
+                star.classList.remove('active');
+                star.className = 'far fa-star';
+            });
+        }
+        
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                let value = parseInt(this.getAttribute('data-value'));
+                selectedRating = value;
+                stars.forEach((s, idx) => {
+                    if(idx < value) {
+                        s.classList.add('active');
+                        s.className = 'fas fa-star';
+                    } else {
+                        s.classList.remove('active');
+                        s.className = 'far fa-star';
+                    }
+                });
+            });
+        });
+        
+        let feedbacks = [];
+        
+        function loadFeedbacks() {
+            const stored = localStorage.getItem('voidcode_feedbacks_oren');
+            if(stored) {
+                try {
+                    feedbacks = JSON.parse(stored);
+                } catch(e) { feedbacks = []; }
+            } else {
+                feedbacks = [];
+            }
+            renderFeedbacks();
+        }
+        
+        function saveFeedbacks() {
+            localStorage.setItem('voidcode_feedbacks_oren', JSON.stringify(feedbacks));
+            renderFeedbacks();
+        }
+        
+        function renderFeedbacks() {
+            if(!feedbackListContainer) return;
+            if(feedbacks.length === 0) {
+                feedbackListContainer.innerHTML = '<div style="text-align:center; color:#c9a96b; padding:1rem;">✨ Belum ada feedback. Jadi yang pertama! ✨</div>';
+                return;
+            }
+            let html = '';
+            [...feedbacks].reverse().forEach(fb => {
+                const starFull = '★'.repeat(fb.rating);
+                const starEmpty = '☆'.repeat(5 - fb.rating);
+                const starsDisplay = `<span style="color:#facc15;">${starFull}</span><span style="color:#5f4c38;">${starEmpty}</span>`;
+                html += `
+                    <div class="feedback-item">
+                        <div class="feedback-name">${escapeHtml(fb.name || 'Anonim')}</div>
+                        <div class="feedback-stars">${starsDisplay} (${fb.rating}/5)</div>
+                        <div class="feedback-text">${escapeHtml(fb.message)}</div>
+                        <div class="feedback-date">${fb.date}</div>
+                    </div>
+                `;
+            });
+            feedbackListContainer.innerHTML = html;
+        }
+        
+        function escapeHtml(str) {
+            if(!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if(m === '&') return '&amp;';
+                if(m === '<') return '&lt;';
+                if(m === '>') return '&gt;';
+                return m;
+            });
+        }
+        
+        submitFeedback.addEventListener('click', () => {
+            const name = document.getElementById('fbName').value.trim();
+            const message = document.getElementById('fbMessage').value.trim();
+            if(message === "") {
+                alert("Pesan feedback tidak boleh kosong!");
+                return;
+            }
+            if(selectedRating === 0) {
+                alert("Pilih rating bintang (1-5) dulu!");
+                return;
+            }
+            const newFeedback = {
+                name: name === "" ? "Anonim" : name,
+                message: message,
+                rating: selectedRating,
+                date: new Date().toLocaleString('id-ID')
+            };
+            feedbacks.push(newFeedback);
+            saveFeedbacks();
+            feedbackModal.classList.remove('show-modal');
+            alert("Terima kasih atas feedbacknya!");
+        });
+        
+        loadFeedbacks();
+        
+        const cards = document.querySelectorAll('.topic-card');
+        function checkScroll() {
+            const trigger = window.innerHeight * 0.85;
+            cards.forEach(c => { if(c.getBoundingClientRect().top < trigger) c.classList.add('visible'); });
+        }
+        window.addEventListener('scroll', checkScroll);
+        window.addEventListener('resize', checkScroll);
+        checkScroll();
+    })();
+</script>
+</body>
+</html>
