@@ -742,8 +742,10 @@
 
 <script>
     (function() {
-        const BIN_ID = "YOUR_BIN_ID";
-        const API_KEY = "YOUR_API_KEY";
+        const FORM_URL = 'https://docs.google.com/forms/d/e/YOUR_FORM_ID_HERE/formResponse';
+        const ENTRY_NAME = 'entry.123456789';
+        const ENTRY_MESSAGE = 'entry.987654321';
+        const ENTRY_RATING = 'entry.555555555';
         
         const hamburger = document.getElementById('hamburger');
         const panel = document.getElementById('menuPanel');
@@ -808,80 +810,21 @@
             });
         });
         
-        let feedbacks = [];
-        
-        async function loadFeedbacks() {
+        async function submitToGoogleForm(name, message, rating) {
+            const formData = new FormData();
+            formData.append(ENTRY_NAME, name || 'Anonim');
+            formData.append(ENTRY_MESSAGE, message);
+            formData.append(ENTRY_RATING, rating.toString());
             try {
-                const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-                    headers: { "X-Master-Key": API_KEY }
+                await fetch(FORM_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: formData
                 });
-                const data = await res.json();
-                if (data && data.record && data.record.feedbacks) {
-                    feedbacks = data.record.feedbacks;
-                } else {
-                    feedbacks = [];
-                }
+                return true;
             } catch(e) {
-                const stored = localStorage.getItem('voidcode_feedbacks_oren');
-                if(stored) {
-                    try {
-                        feedbacks = JSON.parse(stored);
-                    } catch(e) { feedbacks = []; }
-                } else {
-                    feedbacks = [];
-                }
+                return false;
             }
-            renderFeedbacks();
-        }
-        
-        async function saveFeedbacks() {
-            const payload = { feedbacks: feedbacks };
-            try {
-                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': API_KEY
-                    },
-                    body: JSON.stringify(payload)
-                });
-            } catch(e) {
-                localStorage.setItem('voidcode_feedbacks_oren', JSON.stringify(feedbacks));
-            }
-            renderFeedbacks();
-        }
-        
-        function renderFeedbacks() {
-            if(!feedbackListContainer) return;
-            if(feedbacks.length === 0) {
-                feedbackListContainer.innerHTML = '<div style="text-align:center; color:#c9a96b; padding:1rem;">✨ Belum ada feedback. Jadi yang pertama! ✨</div>';
-                return;
-            }
-            let html = '';
-            [...feedbacks].reverse().forEach(fb => {
-                const starFull = '★'.repeat(fb.rating);
-                const starEmpty = '☆'.repeat(5 - fb.rating);
-                const starsDisplay = `<span style="color:#facc15;">${starFull}</span><span style="color:#5f4c38;">${starEmpty}</span>`;
-                html += `
-                    <div class="feedback-item">
-                        <div class="feedback-name">${escapeHtml(fb.name || 'Anonim')}</div>
-                        <div class="feedback-stars">${starsDisplay} (${fb.rating}/5)</div>
-                        <div class="feedback-text">${escapeHtml(fb.message)}</div>
-                        <div class="feedback-date">${fb.date}</div>
-                    </div>
-                `;
-            });
-            feedbackListContainer.innerHTML = html;
-        }
-        
-        function escapeHtml(str) {
-            if(!str) return '';
-            return str.replace(/[&<>]/g, function(m) {
-                if(m === '&') return '&amp;';
-                if(m === '<') return '&lt;';
-                if(m === '>') return '&gt;';
-                return m;
-            });
         }
         
         submitFeedback.addEventListener('click', async () => {
@@ -895,19 +838,18 @@
                 alert("Pilih rating bintang (1-5) dulu!");
                 return;
             }
-            const newFeedback = {
-                name: name === "" ? "Anonim" : name,
-                message: message,
-                rating: selectedRating,
-                date: new Date().toLocaleString('id-ID')
-            };
-            feedbacks.push(newFeedback);
-            await saveFeedbacks();
-            feedbackModal.classList.remove('show-modal');
-            alert("Terima kasih atas feedbacknya!");
+            const success = await submitToGoogleForm(name, message, selectedRating);
+            if(success) {
+                alert("Terima kasih! Feedback telah dikirim.");
+                feedbackModal.classList.remove('show-modal');
+                resetFeedbackForm();
+                feedbackListContainer.innerHTML = '<div style="text-align:center; color:#c9a96b; padding:1rem;">✅ Feedback terkirim! Terima kasih.</div>';
+            } else {
+                alert("Gagal mengirim. Coba lagi nanti.");
+            }
         });
         
-        loadFeedbacks();
+        feedbackListContainer.innerHTML = '<div style="text-align:center; color:#c9a96b; padding:1rem;">📊 Feedback akan masuk ke spreadsheet Google Form milik pemilik website. Terima kasih!</div>';
         
         const cards = document.querySelectorAll('.topic-card');
         function checkScroll() {
