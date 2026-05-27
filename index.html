@@ -742,6 +742,9 @@
 
 <script>
     (function() {
+        const BIN_ID = "YOUR_BIN_ID";
+        const API_KEY = "YOUR_API_KEY";
+        
         const hamburger = document.getElementById('hamburger');
         const panel = document.getElementById('menuPanel');
         const overlay = document.getElementById('overlay');
@@ -807,20 +810,44 @@
         
         let feedbacks = [];
         
-        function loadFeedbacks() {
-            const stored = localStorage.getItem('voidcode_feedbacks_oren');
-            if(stored) {
-                try {
-                    feedbacks = JSON.parse(stored);
-                } catch(e) { feedbacks = []; }
-            } else {
-                feedbacks = [];
+        async function loadFeedbacks() {
+            try {
+                const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+                    headers: { "X-Master-Key": API_KEY }
+                });
+                const data = await res.json();
+                if (data && data.record && data.record.feedbacks) {
+                    feedbacks = data.record.feedbacks;
+                } else {
+                    feedbacks = [];
+                }
+            } catch(e) {
+                const stored = localStorage.getItem('voidcode_feedbacks_oren');
+                if(stored) {
+                    try {
+                        feedbacks = JSON.parse(stored);
+                    } catch(e) { feedbacks = []; }
+                } else {
+                    feedbacks = [];
+                }
             }
             renderFeedbacks();
         }
         
-        function saveFeedbacks() {
-            localStorage.setItem('voidcode_feedbacks_oren', JSON.stringify(feedbacks));
+        async function saveFeedbacks() {
+            const payload = { feedbacks: feedbacks };
+            try {
+                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': API_KEY
+                    },
+                    body: JSON.stringify(payload)
+                });
+            } catch(e) {
+                localStorage.setItem('voidcode_feedbacks_oren', JSON.stringify(feedbacks));
+            }
             renderFeedbacks();
         }
         
@@ -857,7 +884,7 @@
             });
         }
         
-        submitFeedback.addEventListener('click', () => {
+        submitFeedback.addEventListener('click', async () => {
             const name = document.getElementById('fbName').value.trim();
             const message = document.getElementById('fbMessage').value.trim();
             if(message === "") {
@@ -875,7 +902,7 @@
                 date: new Date().toLocaleString('id-ID')
             };
             feedbacks.push(newFeedback);
-            saveFeedbacks();
+            await saveFeedbacks();
             feedbackModal.classList.remove('show-modal');
             alert("Terima kasih atas feedbacknya!");
         });
