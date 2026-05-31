@@ -209,7 +209,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) scale(0.95);
-            background: #1e1712f2;
+            background: #1e1717f2;
             backdrop-filter: blur(24px);
             width: 90%;
             max-width: 440px;
@@ -264,7 +264,7 @@
         .star-rating i.active {
             color: #facc15;
         }
-        button.close-modal, button.submit-feedback {
+        button.close-modal, button.submit-feedback, .btn-exim {
             background: #f97316;
             border: none;
             padding: 0.6rem 1.5rem;
@@ -277,9 +277,17 @@
             font-size: 0.9rem;
             transition: 0.2s;
         }
-        button.close-modal:hover, button.submit-feedback:hover {
+        button.close-modal:hover, button.submit-feedback:hover, .btn-exim:hover {
             background: #facc15;
             transform: scale(0.98);
+        }
+        .exim-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        .file-input {
+            display: none;
         }
 
         .hero {
@@ -446,6 +454,14 @@
             .hero h1 { font-size: 1.8rem; }
             .hero-logo { width: 75px; height: 75px; }
         }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #c9a96b;
+            border-top: 1px solid #f97316;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
@@ -454,9 +470,15 @@
     <i class="fas fa-times close-menu" id="closeMenu"></i>
     <div class="menu-item" id="creditBtn"><i class="fas fa-id-card"></i> Credit</div>
     <div class="menu-item" id="feedbackBtn"><i class="fas fa-star"></i> Beri Feedback</div>
+    <div class="exim-buttons">
+        <button class="btn-exim" id="exportFeedbackBtn"><i class="fas fa-download"></i> Ekspor</button>
+        <button class="btn-exim" id="importFeedbackBtn"><i class="fas fa-upload"></i> Impor</button>
+        <input type="file" id="importFileInput" accept=".json" style="display:none">
+    </div>
     <div class="feedback-list" id="feedbackListContainer">
         <div style="text-align:center; color:#c9a96b; padding:1rem;">Memuat feedback...</div>
     </div>
+    <div style="font-size:0.7rem; text-align:center; color:#c9a96b; margin-top:8px;">※ Bagikan file ekspor ke teman agar mereka bisa melihat feedback ini</div>
 </div>
 
 <div class="modal-credit" id="creditModal">
@@ -497,6 +519,7 @@
 </section>
 
 <div class="container">
+    <!-- Pengertian Coding -->
     <div class="section-title"><i class="fas fa-question-circle"></i> Apa itu Coding?</div>
     <div class="topic-card" data-scroll>
         <div class="card-content">
@@ -518,6 +541,7 @@
         </div>
     </div>
 
+    <!-- Cara Menjalankan Program -->
     <div class="section-title"><i class="fas fa-play-circle"></i> Cara Menjalankan Program</div>
     <div class="topic-card reverse" data-scroll>
         <div class="card-content">
@@ -545,6 +569,7 @@
         </div>
     </div>
 
+    <!-- Bahasa Pemrograman Populer (beberapa tetap) -->
     <div class="section-title"><i class="fas fa-cogs"></i> Bahasa Pemrograman Populer</div>
     
     <div class="topic-card" data-scroll>
@@ -594,6 +619,52 @@
         </div>
     </div>
 
+    <!-- KOTLIN -->
+    <div class="topic-card reverse" data-scroll>
+        <div class="card-content">
+            <div class="card-text">
+                <div class="topic-header"><i class="fab fa-android"></i><div class="topic-title">Kotlin - Modern untuk Android</div></div>
+                <div class="divider"></div>
+                <div class="explanation">
+                    Kotlin adalah bahasa pemrograman modern yang berjalan di atas JVM (Java Virtual Machine). Dikembangkan oleh JetBrains, Kotlin menjadi bahasa resmi untuk pengembangan Android (selain Java). Sintaksnya lebih ringkas dan aman (null safety). Kotlin juga bisa digunakan untuk backend (Ktor, Spring), multiplatform mobile, dan JavaScript. Cara menjalankan: install IntelliJ IDEA, buat file .kt, compile dengan `kotlinc hello.kt -include-runtime -d hello.jar` lalu `java -jar hello.jar`. Bisa juga menggunakan playground online.
+                </div>
+                <div class="image-placeholder"><div><i class="fab fa-android"></i> Android</div><div><i class="fas fa-code"></i> Multiplatform</div></div>
+            </div>
+            <div class="card-code">
+                fun main() {<br>
+                  val nama = "Raihan"<br>
+                  println("Halo, $nama!")<br>
+                  val numbers = listOf(1,2,3)<br>
+                  numbers.forEach { println(it) }<br>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- XML -->
+    <div class="topic-card" data-scroll>
+        <div class="card-content">
+            <div class="card-text">
+                <div class="topic-header"><i class="fas fa-file-code"></i><div class="topic-title">XML - eXtensible Markup Language</div></div>
+                <div class="divider"></div>
+                <div class="explanation">
+                    XML adalah bahasa markup yang dirancang untuk menyimpan dan mengangkut data. Mirip HTML, tapi lebih fleksibel karena tag-nya dapat didefinisikan sendiri. XML sering digunakan untuk konfigurasi aplikasi, pertukaran data antar sistem (SOAP, REST), file layout Android, dan RSS feed. Tidak memiliki perilaku bawaan seperti HTML, fokus pada struktur data. Cara menjalankan: cukup buka file .xml di browser atau editor teks, parser XML dapat membaca menggunakan JavaScript (DOMParser) atau berbagai bahasa pemrograman.
+                </div>
+                <div class="image-placeholder"><div><i class="fas fa-database"></i> Data Exchange</div><div><i class="fab fa-android"></i> Layout Android</div></div>
+            </div>
+            <div class="card-code">
+                &lt;?xml version="1.0" encoding="UTF-8"?&gt;<br>
+                &lt;bookstore&gt;<br>
+                  &lt;book category="programming"&gt;<br>
+                    &lt;title&gt;Belajar Kotlin&lt;/title&gt;<br>
+                    &lt;author&gt;Raihan&lt;/author&gt;<br>
+                  &lt;/book&gt;<br>
+                &lt;/bookstore&gt;
+            </div>
+        </div>
+    </div>
+
+    <!-- MySQL, C++, Lua, PHP tetap -->
     <div class="topic-card reverse" data-scroll>
         <div class="card-content">
             <div class="card-text">
@@ -664,6 +735,7 @@
         </div>
     </div>
 
+    <!-- HTML/CSS/JS dan Database Backend, Cara Belajar Efektif tetap -->
     <div class="section-title"><i class="fas fa-chalkboard-teacher"></i> Detail Pemrograman Web</div>
     <div class="topic-card reverse" data-scroll>
         <div class="card-content">
@@ -742,11 +814,140 @@
 
 <script>
     (function() {
-        const FORM_URL = 'https://docs.google.com/forms/d/e/YOUR_FORM_ID_HERE/formResponse';
-        const ENTRY_NAME = 'entry.123456789';
-        const ENTRY_MESSAGE = 'entry.987654321';
-        const ENTRY_RATING = 'entry.555555555';
-        
+        // --- MANAJEMEN FEEDBACK dengan localStorage + Ekspor/Impor ---
+        const STORAGE_KEY = 'voidcode_feedbacks';
+        let feedbacks = [];
+
+        // DOM elements
+        const feedbackListContainer = document.getElementById('feedbackListContainer');
+        const starIcons = document.querySelectorAll('#starRating i');
+        let selectedRating = 0;
+
+        // Fungsi simpan ke localStorage
+        function saveFeedbacks() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(feedbacks));
+            renderFeedbacks();
+        }
+
+        // Render daftar feedback ke dalam menu panel
+        function renderFeedbacks() {
+            if (!feedbackListContainer) return;
+            if (feedbacks.length === 0) {
+                feedbackListContainer.innerHTML = '<div style="text-align:center; color:#c9a96b; padding:1rem;">✨ Belum ada feedback. Jadi yang pertama!</div>';
+                return;
+            }
+            let html = '';
+            // urutkan dari yang terbaru (descending)
+            const sorted = [...feedbacks].reverse();
+            sorted.forEach(fb => {
+                const starsFull = '★'.repeat(fb.rating);
+                const starsEmpty = '☆'.repeat(5 - fb.rating);
+                html += `
+                    <div class="feedback-item">
+                        <div class="feedback-name">${escapeHtml(fb.name || 'Anonim')}</div>
+                        <div class="feedback-stars">${starsFull}${starsEmpty}</div>
+                        <div class="feedback-text">${escapeHtml(fb.message)}</div>
+                        <div class="feedback-date">${fb.date}</div>
+                    </div>
+                `;
+            });
+            feedbackListContainer.innerHTML = html;
+        }
+
+        // Tambah feedback baru
+        function addFeedback(name, message, rating) {
+            const newFeedback = {
+                id: Date.now(),
+                name: name.trim() || 'Anonim',
+                message: message.trim(),
+                rating: rating,
+                date: new Date().toLocaleString('id-ID')
+            };
+            feedbacks.push(newFeedback);
+            saveFeedbacks();
+        }
+
+        // Load dari localStorage, jika kosong beri data contoh
+        function loadFeedbacks() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                feedbacks = JSON.parse(stored);
+            } else {
+                // Data contoh agar terlihat menarik
+                feedbacks = [
+                    { id: 1, name: "Budi", message: "Website keren banget! Membantu saya memahami coding.", rating: 5, date: "2025-04-01 14:23:10" },
+                    { id: 2, name: "Citra", message: "Materi lengkap, tapi saran tambah contoh project.", rating: 4, date: "2025-04-02 09:15:42" },
+                    { id: 3, name: "Rizki", message: "Suka dengan warna tema oranye, mantap!", rating: 5, date: "2025-04-03 20:30:22" }
+                ];
+                saveFeedbacks();
+            }
+            renderFeedbacks();
+        }
+
+        // Utility escape HTML
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+                return c;
+            });
+        }
+
+        // Ekspor feedback ke file JSON
+        function exportFeedback() {
+            const dataStr = JSON.stringify(feedbacks, null, 2);
+            const blob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `voidcode_feedback_${new Date().toISOString().slice(0,19)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            alert("Feedback berhasil diekspor! Bagikan file ini ke teman.");
+        }
+
+        // Impor file JSON (merge dengan feedback yang sudah ada, tanpa duplikat id)
+        function importFeedback(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (Array.isArray(imported)) {
+                        let newCount = 0;
+                        imported.forEach(imp => {
+                            if (imp.id && imp.message && imp.rating && !feedbacks.some(ex => ex.id === imp.id)) {
+                                feedbacks.push(imp);
+                                newCount++;
+                            } else if (!imp.id && imp.message) {
+                                // jika tidak punya id, beri id baru
+                                imp.id = Date.now() + Math.random();
+                                feedbacks.push(imp);
+                                newCount++;
+                            }
+                        });
+                        if (newCount > 0) {
+                            saveFeedbacks();
+                            alert(`Berhasil mengimpor ${newCount} feedback baru!`);
+                        } else {
+                            alert("Tidak ada feedback baru yang diimpor (mungkin sudah ada).");
+                        }
+                    } else {
+                        alert("Format file tidak valid. Harus berupa array feedback.");
+                    }
+                } catch(err) {
+                    alert("Gagal membaca file JSON: " + err.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // --- UI untuk menu, modal, dan lainnya ---
         const hamburger = document.getElementById('hamburger');
         const panel = document.getElementById('menuPanel');
         const overlay = document.getElementById('overlay');
@@ -758,47 +959,39 @@
         const feedbackModal = document.getElementById('feedbackModal');
         const closeFeedbackModal = document.getElementById('closeFeedbackModal');
         const submitFeedback = document.getElementById('submitFeedbackBtn');
-        const feedbackListContainer = document.getElementById('feedbackListContainer');
-        
-        const stars = document.querySelectorAll('#starRating i');
-        let selectedRating = 0;
-        
+        const exportBtn = document.getElementById('exportFeedbackBtn');
+        const importBtn = document.getElementById('importFeedbackBtn');
+        const importFile = document.getElementById('importFileInput');
+
         function openMenu() { panel.classList.add('open'); overlay.classList.add('show'); document.body.style.overflow = 'hidden'; }
         function closeMenuSide() { panel.classList.remove('open'); overlay.classList.remove('show'); document.body.style.overflow = ''; }
         hamburger.addEventListener('click', openMenu);
         closeMenu.addEventListener('click', closeMenuSide);
         overlay.addEventListener('click', closeMenuSide);
-        
-        creditBtn.addEventListener('click', () => {
-            closeMenuSide();
-            setTimeout(() => creditModal.classList.add('show-modal'), 150);
-        });
+
+        creditBtn.addEventListener('click', () => { closeMenuSide(); setTimeout(() => creditModal.classList.add('show-modal'), 150); });
         closeCredit.addEventListener('click', () => creditModal.classList.remove('show-modal'));
         creditModal.addEventListener('click', (e) => { if(e.target === creditModal) creditModal.classList.remove('show-modal'); });
         
-        feedbackBtn.addEventListener('click', () => {
-            closeMenuSide();
-            setTimeout(() => feedbackModal.classList.add('show-modal'), 150);
-            resetFeedbackForm();
-        });
+        feedbackBtn.addEventListener('click', () => { closeMenuSide(); setTimeout(() => feedbackModal.classList.add('show-modal'), 150); resetFeedbackForm(); });
         closeFeedbackModal.addEventListener('click', () => feedbackModal.classList.remove('show-modal'));
         feedbackModal.addEventListener('click', (e) => { if(e.target === feedbackModal) feedbackModal.classList.remove('show-modal'); });
-        
+
         function resetFeedbackForm() {
             document.getElementById('fbName').value = '';
             document.getElementById('fbMessage').value = '';
             selectedRating = 0;
-            stars.forEach(star => {
+            starIcons.forEach(star => {
                 star.classList.remove('active');
                 star.className = 'far fa-star';
             });
         }
-        
-        stars.forEach(star => {
+
+        starIcons.forEach(star => {
             star.addEventListener('click', function() {
                 let value = parseInt(this.getAttribute('data-value'));
                 selectedRating = value;
-                stars.forEach((s, idx) => {
+                starIcons.forEach((s, idx) => {
                     if(idx < value) {
                         s.classList.add('active');
                         s.className = 'fas fa-star';
@@ -809,25 +1002,8 @@
                 });
             });
         });
-        
-        async function submitToGoogleForm(name, message, rating) {
-            const formData = new FormData();
-            formData.append(ENTRY_NAME, name || 'Anonim');
-            formData.append(ENTRY_MESSAGE, message);
-            formData.append(ENTRY_RATING, rating.toString());
-            try {
-                await fetch(FORM_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    body: formData
-                });
-                return true;
-            } catch(e) {
-                return false;
-            }
-        }
-        
-        submitFeedback.addEventListener('click', async () => {
+
+        submitFeedback.addEventListener('click', () => {
             const name = document.getElementById('fbName').value.trim();
             const message = document.getElementById('fbMessage').value.trim();
             if(message === "") {
@@ -838,19 +1014,27 @@
                 alert("Pilih rating bintang (1-5) dulu!");
                 return;
             }
-            const success = await submitToGoogleForm(name, message, selectedRating);
-            if(success) {
-                alert("Terima kasih! Feedback telah dikirim.");
-                feedbackModal.classList.remove('show-modal');
-                resetFeedbackForm();
-                feedbackListContainer.innerHTML = '<div style="text-align:center; color:#c9a96b; padding:1rem;">✅ Feedback terkirim! Terima kasih.</div>';
-            } else {
-                alert("Gagal mengirim. Coba lagi nanti.");
+            addFeedback(name, message, selectedRating);
+            alert("Terima kasih! Feedback telah ditambahkan.");
+            feedbackModal.classList.remove('show-modal');
+            resetFeedbackForm();
+            closeMenuSide(); // optional
+        });
+
+        exportBtn.addEventListener('click', () => {
+            exportFeedback();
+        });
+        importBtn.addEventListener('click', () => {
+            importFile.click();
+        });
+        importFile.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                importFeedback(e.target.files[0]);
+                e.target.value = '';
             }
         });
-        
-        feedbackListContainer.innerHTML = '<div style="text-align:center; color:#c9a96b; padding:1rem;">📊 Feedback akan masuk ke spreadsheet Google Form milik pemilik website. Terima kasih!</div>';
-        
+
+        // animasi scroll cards
         const cards = document.querySelectorAll('.topic-card');
         function checkScroll() {
             const trigger = window.innerHeight * 0.85;
@@ -859,6 +1043,9 @@
         window.addEventListener('scroll', checkScroll);
         window.addEventListener('resize', checkScroll);
         checkScroll();
+
+        // load feedback awal
+        loadFeedbacks();
     })();
 </script>
 </body>
